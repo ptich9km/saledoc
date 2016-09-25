@@ -1,36 +1,9 @@
-<html>
-    <head>
-        <title>Page link</title>
-    </head>
-    <body>
-        <div>
-            <h1><a href="">Документы</a></h1>
-        </div>
-
-        <div>
-            <h2><a href="">Шаблон договора на разработку рамочный</a></h2>
-        </div>
-
-        <div>
-            <h2><a href="">Шаблон договора на разработку c фиксированной стоимостью</a></h2>
-        </div>
-
-        <div>
-            <h2><a href="">Шаблон договора на разработку по схеме t&m</a></h2>
-        </div>
-
-        <div>
-            <h2><a href="">Шаблон договора-оферты</a></h2>
-        </div>
-
-        <div>
-            <h2><a href="">Шаблон договора на услуги (консультацию)</a></h2>
-        </div>
-
-        <div>
-            <h2><a href="">Шаблон договора на разработку дизайна</a></h2>
-        </div>
-
-
-    </body>
-</html>
+{% extends 'saledoc/base.html' %}
+<h1>Hello</h1>
+{% block content %}
+      {% for post in posts %}
+          <h1><a href="">{{ Post.name_document }}</a></h1>
+          <h1>  <a href="{% url 'post_detail' pk=post.pk %}">{{ post.name_document }}</a></h1>
+          <p>{{ Post.soderjanie|linebreaksbr }}</p>
+      {% endfor %}
+{% endblock content %}

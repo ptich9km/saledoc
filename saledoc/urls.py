@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from . import views
 
+#Формирую URL на свой проект 
 urlpatterns = [
     url(r'^$', views.page_link, name='page_link'),
 ]
