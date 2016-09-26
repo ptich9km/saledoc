@@ -1,9 +1,12 @@
 {% extends 'saledoc/base.html' %}
-<h1>Hello</h1>
 {% block content %}
+<h1>Hello</h1>
       {% for post in posts %}
-          <h1><a href="">{{ Post.name_document }}</a></h1>
-          <h1>  <a href="{% url 'post_detail' pk=post.pk %}">{{ post.name_document }}</a></h1>
-          <p>{{ Post.soderjanie|linebreaksbr }}</p>
+	<h1>Hello1</h1>
+	<h1><a href="">{{ post.name_document }}</a></h1>
+	<p>{{ post.soderjanie|linebreaksbr }}</p>
       {% endfor %}
+
 {% endblock content %}
+
+

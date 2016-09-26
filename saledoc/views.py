@@ -6,7 +6,8 @@ from django.http import HttpResponse
 
 #Запрос страницы с ссылками
 def page_link(request):
-    return render(request, 'saledoc/page_link.html', {})
+	posts = Post.objects.order_by('name_document')
+	return render(request, 'saledoc/page_link.html', {'posts': posts})
 
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
