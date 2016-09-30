@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from django.shortcuts import render_to_response
 from .models import Post
+
 
 # Create your views here.
 from django.http import HttpResponse
@@ -9,11 +11,16 @@ def page_link(request):
 	posts = Post.objects.order_by('name_document')
 	return render(request, 'saledoc/page_link.html', {'posts': posts})
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+def documents(request, arg2, arg3):
+	if(request.GET.get('mybtn')):
+		document_select="7"
+	else:	
+		document_select=arg3
+	return render_to_response('saledoc/page_content.html', {'document_selected': document_select})
 
-#Простой запрос времени
-def current_datetime(request):
-    now = datetime.datetime.now()
-    html = "<html><body>It is now %s.</body></html>" % now
-    return HttpResponse(html)
+def request_page(request):
+	datas=request.GET.get('CountOrgShortName')
+	print(datas)
+	return render(request,'saledoc/page_download.html', {'inform': datas})
+
+

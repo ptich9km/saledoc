@@ -1,13 +1,26 @@
 {% load staticfiles %}
 <html>
-    <head>
-        <title>Base page</title>
-    </head>
-    <body>
-          <div>
-              <h1><a href="/">Документы</a></h1>
-          </div>
-		{% block content %}
-		{% endblock %}
-    </body>
+	<head>
+		<title>Base page</title>
+	</head>
+	<body>
+
+		  <div>
+			<h1><a href="/">Документы</a></h1>
+		  </div>
+		  <div>
+			{% block linkbar %}
+			{% endblock %}
+		  </div>
+		  <div>
+			{% block content %}
+			{% endblock %}
+		  </div>
+		  <div>
+
+		  </div>
+
+
+	</body>
 </html>
+
