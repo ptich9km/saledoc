@@ -9,15 +9,13 @@ from django.conf.urls.static import static
 urlpatterns = [
 	url(r'^$', views.page_link, name='page_link'),
 	url(r'^saledoc/(Document(\d+))/$', views.documents),
+	url(r'^static/doc.docx', views.send_file),
+	
 ]
 
-
-if settings.DEBUG:
-	urlpatterns += ('',
-		(settings.STATIC_URL, document_root=settings.STATIC_ROOT),
-    )
-
 '''
+http://10.54.4.73:8000/saledoc/Document1/?CustOrgFullName=&CustOrgShortName=&CustBankDetails=&CustPost=&RCustPost=&CustLastName=&RCustFullName=&CustInitials=&VatRate=&mybtn=Click#
+
 urlpatterns = ['',
 	url(r'^$', views.page_link, name='page_link'),
 	url(r'^saledoc/(Document(\d+))/$', views.documents),

@@ -44,10 +44,10 @@
 		<input type="radio" name="CustBase" value="2"> доверенности №<Br>
 
 	<p><b>8.НДС</b><Br>
-		<input type="radio" name="VatRate_null" value="1"> Стоимость работ без НДС<Br>  
-	    	<input type="radio" name="VatRate18" value="2"> 18% (для РФ)<Br>
-		<input type="radio" name="VatRate20" value="3"> 20% (для РБ )<Br>
-		<p>НДС<Br><input type="text" name="VatRate"><Br>
+		<input type="radio" name="VatRate" value="1"> Стоимость работ без НДС<Br>  
+	    	<input type="radio" name="VatRate" value="2"> 18% (для РФ)<Br>
+		<input type="radio" name="VatRate" value="3"> 20% (для РБ )<Br>
+		<p>НДС<Br><input type="text" name="VatRate_keyboard"><Br>
 
 	<p><b>9.Валюта платежа</b><Br>
 		<p>Валюта по  договору<Br>
@@ -61,6 +61,10 @@
 		<input type="radio" name="CurrencyPayment" value="3">RUR<Br>
 		<input type="radio" name="CurrencyPayment" value="4">BRB<Br>
 
+	<p><b>10.Сумма по  договору</b><Br>
+		<p>Сумма по  договору<Br>
+		<input type="text" name="summa_dogovor"><Br>
+ 
 		<input type="submit" class="btn" value="Click" name="mybtn">
 		<input type="reset">
 
@@ -70,8 +74,7 @@
 	{% if document_selected == "2" %}
 		<h1>Документ2</h1>
 	<form>
-		<h1>document_selected</h1>
-		<input type="submit" class="btn" value="Click" name="mybtn">
+		<a href="{% static 'doc.docx' %}"> Файл </a>
 	</form>
 	{% endif %}
 
@@ -89,16 +92,11 @@
 
 	{% if document_selected == "6" %}
 		<h1>Документ6</h1>
+		<h1>{{xyi1}}</h1>
 	{% endif %}
 
 	{% if document_selected == "7" %}
-		<h1>AAAAAAAAAAAAAAPPPPPPPPPPPPLLLLLLLLLLEEEEESS</h1>
-	<form>
-		<h1>document_selected</h1>
-		<img src="{% static 'myapp/img/logo.png' %}" />
-		<a href="{% static 'saledoc/static/doc.docx' %}"> Файл1 </a>
-		<link rel="stylesheet" type="text/css" href="{% static 'saledoc/static/doc.docx' %}" />
-	</form>
+		<h1>Док 7</h1>
 	{% endif %}
 
 {% endblock content %}
