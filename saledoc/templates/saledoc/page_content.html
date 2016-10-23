@@ -50,7 +50,7 @@
 		<p>НДС<Br><input type="text" name="VatRate_keyboard"><Br>
 
 	<p><b>9.Валюта платежа</b><Br>
-		<p>Валюта по  договору<Br>
+		<p>Валюта по договору<Br>
 		<input type="radio" name="AgrCurrency" value="1">USD<Br>  
 	    	<input type="radio" name="AgrCurrency" value="2">EUR<Br>
 		<input type="radio" name="AgrCurrency" value="3">RUR<Br>
@@ -73,9 +73,11 @@
 
 	{% if document_selected == "2" %}
 		<h1>Документ2</h1>
+		<h1>{{ xyi1 }}</h1>
 	<form>
 		<a href="{% static 'doc.docx' %}"> Файл </a>
 	</form>
+
 	{% endif %}
 
 	{% if document_selected == "3" %}
