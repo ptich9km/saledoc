@@ -4,8 +4,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 #Формирую URL на свой проект 
-
-
 urlpatterns = [
 	url(r'^$', views.page_link, name='page_link'),
 	url(r'^saledoc/(Document(\d+))/$', views.documents),
@@ -13,11 +11,5 @@ urlpatterns = [
 	
 ]
 
-'''
-http://10.54.4.73:8000/saledoc/Document1/?CustOrgFullName=&CustOrgShortName=&CustBankDetails=&CustPost=&RCustPost=&CustLastName=&RCustFullName=&CustInitials=&VatRate=&mybtn=Click#
-
-urlpatterns = ['',
-	url(r'^$', views.page_link, name='page_link'),
-	url(r'^saledoc/(Document(\d+))/$', views.documents),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-'''
+#	url(r'^static/static', views.send_file),
+#	url(r'^saledoc/static/example.txt', views.send_file),
