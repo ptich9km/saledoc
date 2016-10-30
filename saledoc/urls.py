@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 urlpatterns = [
 	url(r'^$', views.page_link, name='page_link'),
 	url(r'^saledoc/(Document(\d+))/$', views.documents),
-	url(r'^static/doc.docx', views.send_file),
+	url(r'saledoc/(?P<fileURL>\d{11,12}.docx)', views.send_file),
 	
 ]
 

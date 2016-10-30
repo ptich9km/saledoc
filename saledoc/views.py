@@ -8,6 +8,7 @@ from django.conf import settings
 import mimetypes
 from docx import *
 from time import localtime
+from shutil import copyfile
 
 # Create your views here.
 from django.http import HttpResponse
@@ -16,6 +17,31 @@ from django.http import HttpResponse
 def page_link(request):
 	posts = Post.objects.order_by('name_document')
 	return render(request, 'saledoc/page_link.html', {'posts': posts})
+
+def data_vremya():
+	# From PC date read.
+	datatime = localtime()
+
+	data1 = datatime[0]
+	data2 = datatime[1]
+	data3 = datatime[2]
+	data4 = datatime[3]
+	data5 = datatime[4]
+	data = []
+	data.append(data1)
+	data.append(data2)
+	data.append(data3)
+	data.append(data4)
+	data.append(data5)
+
+	datavalue = ''.join(str(v) for v in data)
+
+	return datavalue
+
+def create_copy_fileshablon(namedoc):
+	copyfile('saledoc/test{}.docx'.format(int(namedoc)), 'saledoc/{}.docx'.format(data_vremya()))
+	path_to_newfile = 'saledoc/{}.docx'.format(data_vremya())
+	return path_to_newfile
 
 def documents(request, arg2, arg3):
 	if(request.GET.get('mybtn')):
@@ -41,62 +67,24 @@ def documents(request, arg2, arg3):
 		summa_dogovor = request.GET.get('summa_dogovor')
 		VatRate_keyboard = request.GET.get('VatRate_keyboard')
 
-		
+		new_file_is = create_copy_fileshablon(namedoc)
 
 		writedata_indocfile(namedoc, data_dogovora, RCustFullName, CustOrgShortName, CustBankDetails, CustOrgFullName, CustInitials, place, CountOrgShortName, VatRate, AgrCurrency, CurrencyPayment, podpis_name, CustPost, RCustPost, CustLastName, CustBase, number_dogovor, summa_dogovor, VatRate_keyboard)
-	else:	
-		document_select = arg3
-	return render_to_response('saledoc/page_content.html', {'document_selected': document_select})
-
-def create_copy_fileshablon(namedoc):
-	if int(namedoc) == 1: 
-		f = open(test1.docx)
-		s = f.read()
-		fcopy = open
-	elif int(namedoc) == 2:
-		document.add_heading('Шаблон договора на разработку c фиксированной стоимостью', 0)
-	elif int(namedoc) == 3:
-		document.add_heading('Шаблон договора на разработку по схеме t&m', 0)
-	elif int(namedoc) == 4:
-		document.add_heading('Шаблон договора-оферты', 0)
-	elif int(namedoc) == 5:
-		document.add_heading('Шаблон договора на услуги (консультацию)', 0)
 	else:
-		document.add_heading('Шаблон договора на разработку дизайна', 0)	
+		new_file_is = str()	
+		document_select = arg3
+	return render_to_response('saledoc/page_content.html', {'document_selected': document_select, 'news_file' : new_file_is})
 
-
-	return 1
 def request_page(request):
 	datas = request.GET.get('CountOrgShortName')
 	print(datas)
 	return render(request, 'saledoc/page_download.html', {'inform': datas})
 
-
-def data_vremya():
-	# From PC date read.
-	datatime = localtime()
-
-	data1 = datatime[0]
-	data2 = datatime[1]
-	data3 = datatime[2]
-	data4 = datatime[3]
-	data5 = datatime[4]
-	data = []
-	data.append(data1)
-	data.append(data2)
-	data.append(data3)
-	data.append(data4)
-	data.append(data5)
-
-	datavalue = ''.join(str(v) for v in data)
-
-	return datavalue
-
-
-def send_file(request):
+def send_file(request, fileURL):
 	# Select your file here.
-	filename = "C:\Projects\saledoc\saledoc\static\doc.docx"
-	download_name = "doc.docx"
+	#filenames = request.GET.get(fileURL)
+	filename = "saledoc\{}".format(fileURL)
+	download_name = "{}".format(fileURL)
 	wrapper = FileWrapper(open(filename))
 	content_type = mimetypes.guess_type(filename)[0]
 	response = HttpResponse(wrapper, content_type=content_type)
@@ -104,6 +92,7 @@ def send_file(request):
 	response['Content-Disposition'] = "attachment; filename=%s" % download_name
 	return response
 
+send_file("http://192.168.1.4:8000/saledoc/Document1/saledoc/201610301712.docx", "201610301712.docx")
 
 def writedata_indocfile(namedoc, data_dogovora, CustOrgFullName, CustOrgShortName, CustBankDetails, RCustFullName, CustInitials, place, CountOrgShortName, VatRate, AgrCurrency, CurrencyPayment, podpis_name, CustPost, RCustPost, CustLastName, CustBase, number_dogovor, summa_dogovor, VatRate_keyboard):
 	
@@ -134,7 +123,7 @@ def writedata_indocfile(namedoc, data_dogovora, CustOrgFullName, CustOrgShortNam
 	elif int(CountOrgShortName) == 2:
 		document.add_paragraph('ООО Промвад Софт')
 	else:
-		document.add_paragraph('ПРВ �?нжиниринг')
+		document.add_paragraph('ПРВ Инжиниринг')
 
 	# Proverka chemu raven parametr podpis_name i formirovanie Podpisivauchego lica.
 	document.add_heading('3. Выбор подписанта со стороны исполнителя', level=1)
@@ -255,30 +244,30 @@ def writedata_indocfile(namedoc, data_dogovora, CustOrgFullName, CustOrgShortNam
 	document.add_paragraph('Валюта по договору')
 	if int(AgrCurrency) == 1: 
 		document.add_paragraph('USD')
-		AgrCurrency = "долларах США"
+		AgrCurrency_ = "долларах США"
 	elif int(AgrCurrency) == 2:
 		document.add_paragraph('EUR')
-		AgrCurrency = "Евро"
+		AgrCurrency_ = "Евро"
 	elif int(AgrCurrency) == 3:
 		document.add_paragraph('RUR')
-		AgrCurrency = "российских рублях"
+		AgrCurrency_ = "российских рублях"
 	else:
 		document.add_paragraph('BRB')
-		AgrCurrency = "белорусских рублях"
+		AgrCurrency_ = "белорусских рублях"
 
 	document.add_paragraph('Валюта платежа')
 	if int(CurrencyPayment) == 1: 
 		document.add_paragraph('USD')
-		CurrencyPayment = "доллары США"
+		CurrencyPayment_ = "доллары США"
 	elif int(CurrencyPayment) == 2:
 		document.add_paragraph('EUR')
-		CurrencyPayment = "Евро"
+		CurrencyPayment_ = "Евро"
 	elif int(CurrencyPayment) == 3:
 		document.add_paragraph('RUR')
-		CurrencyPayment = "российский рубль"
+		CurrencyPayment_ = "российский рубль"
 	else:
 		document.add_paragraph('BRB')
-		CurrencyPayment = "белорусский рубль"
+		CurrencyPayment_ = "белорусский рубль"
 		
 	if int(CurrencyPayment) == 3 and int(AgrCurrency) == 3:
 		CurrencyText = "В случае изменения курса российского рубля по отношению к доллару США на день выставления счета по сравнению с курсом на дату заключения настоящего договора,  Исполнитель вправе проиндексировать сумму настоящего договора в части невыставленных счетов путем пересчета суммы счета в доллары США по курсу ЦБРФ на день подписания  настоящего договора и последующего пересчета в российские рубли по курсу ЦБРФ на день выставления счета. Кроме того, в случае нарушения срока оплаты согласно настоящего договора, Исполнитель вправе пересчитать сумму выставленного, но неоплаченного счета и перевыставить счет с учетом корректировки."
@@ -289,7 +278,7 @@ def writedata_indocfile(namedoc, data_dogovora, CustOrgFullName, CustOrgShortNam
 			
 	# Informaziya o summe dogovora.
 	document.add_heading('10.Сумма по  договору {}', level=1)
-	document.add_paragraph(string_to_writenumber(summa_dogovor))
+	document.add_paragraph(string_to_writenumber(int(summa_dogovor)))
 
 	document.add_page_break()
 	document.save('saledoc/static/doc.docx')
