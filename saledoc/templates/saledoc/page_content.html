@@ -10,22 +10,24 @@
 		<input type="text" name="number_dogovor"><Br>
 
 	<p><b>2.Юридическое лицо со стороны исполнителя</b><Br>
-	    	<input type="radio" name="CountOrgShortName" value="1"> ЧУП Промвад<Br>
+	    <input type="radio" name="CountOrgShortName" value="1"> ЧУП Промвад<Br>
 		<input type="radio" name="CountOrgShortName" value="2"> ООО Промвад Софт<Br>
 		<input type="radio" name="CountOrgShortName" value="3"> ПРВ Инжиниринг<Br>
 
 	<p><b>3.Выбор подписанта со стороны исполнителя</b><Br>
-	    	<input type="radio" name="podpis_name" value="1"> Якубович Д.М.<Br>
+	    <input type="radio" name="podpis_name" value="1"> Якубович Д.М.<Br>
 		<input type="radio" name="podpis_name" value="2"> Ковалев С.Н.<Br>
-	    	<input type="radio" name="podpis_name" value="3"> Мозолевский В.В.<Br>
+	    <input type="radio" name="podpis_name" value="3"> Мозолевский В.В.<Br>
 		<input type="radio" name="podpis_name" value="4"> Лиштван Ю.Н.<Br>
-	    	<input type="radio" name="podpis_name" value="5"> Кутень И.С.<Br>
+	    <input type="radio" name="podpis_name" value="5"> Кутень И.С.<Br>
 		<input type="radio" name="podpis_name" value="6"> Ковалев С.К.<Br>
 
 	<p><b>4.Место составления договора</b><Br>
-	    	<input type="radio" name="place" value="1"> Минск <Br>
+	    <input type="radio" name="place" value="1"> Минск <Br>
 		<input type="radio" name="place" value="2"> Москва <Br>
-
+		<input type="radio" name="place" value="3"> Другой город <Br>
+		<input type="text" name="place_dogovor_writing"><Br>
+		
   	<p><b>5.Дата договора</b>
 		<input type="text" name="data_dogovor"><Br>
 
@@ -45,371 +47,67 @@
 
 	<p><b>8.НДС</b><Br>
 		<input type="radio" name="VatRate" value="1"> Стоимость работ без НДС<Br>  
-	    	<input type="radio" name="VatRate" value="2"> 18% (для РФ)<Br>
+	    <input type="radio" name="VatRate" value="2"> 18% (для РФ)<Br>
 		<input type="radio" name="VatRate" value="3"> 20% (для РБ )<Br>
 		<p>НДС<Br><input type="text" name="VatRate_keyboard"><Br>
 
 	<p><b>9.Валюта платежа</b><Br>
 		<p>Валюта по договору<Br>
 		<input type="radio" name="AgrCurrency" value="1">USD<Br>  
-	    	<input type="radio" name="AgrCurrency" value="2">EUR<Br>
+	    <input type="radio" name="AgrCurrency" value="2">EUR<Br>
 		<input type="radio" name="AgrCurrency" value="3">RUR<Br>
 		<input type="radio" name="AgrCurrency" value="4">BRB<Br>
 		<p>Валюта платежа<Br>
 		<input type="radio" name="CurrencyPayment" value="1">USD<Br>  
-	    	<input type="radio" name="CurrencyPayment" value="2">EUR<Br>
+	    <input type="radio" name="CurrencyPayment" value="2">EUR<Br>
 		<input type="radio" name="CurrencyPayment" value="3">RUR<Br>
 		<input type="radio" name="CurrencyPayment" value="4">BRB<Br>
 
 	<p><b>10.Сумма по  договору</b><Br>
 		<p>Сумма по  договору<Br>
-		<input type="text" name="summa_dogovor"><Br>
- 
-		<input type="submit" class="btn" value="Click" name="mybtn">
-		<input type="reset">
+		<input type="text" name="CostNum"><Br>
+		
+	<p><b>11.Место рассмотрения споров </b><Br>
+		<input type="radio" name="AgrLaw" value="1">Арбитражном суде г. Москвы<Br>  
+	    <input type="radio" name="AgrLaw" value="2">Хозяйственном суде по месту нахождения Истца<Br>
 
+	<p><b>12.Наименование работ </b><Br>
+		<input type="radio" name="ProductName" value="1">разработку научно технической продукции<Br>  
+	    <input type="radio" name="ProductName" value="2">проведение опытно конструкторских работ<Br>
+ 	    <input type="radio" name="ProductName" value="3">разработку программного обеспечения<Br>
+ 	   	<Br><input type="text" name="ProductName_type"><Br>
+ 	   	
+ 	<p><b>13.Оплата </b><Br>
+		<input type="radio" name="CostPrePayment" value="1">70 (семидесяти)<Br>  
+	    <input type="radio" name="CostPrePayment" value="2">50 (пятидесяти)<Br>
+ 	    <Br><input type="text" name="CostPrePayment_type"><Br>
+ 	    
+ 	<p><b>14.Тема договора </b><Br>
+ 	    <Br><input type="text" name="ProductNameDetail"><Br>	    
+  
+ 		<input type="submit" class="btn" value="Click" name="mybtn">
+		<input type="reset">
 	</form>
 	{% endif %}
 
 	{% if document_selected == "2" %}
-	<form action="#" method="get">
-
- 	<p><b>1.Номер договора</b>
-		<input type="text" name="number_dogovor"><Br>
-
-	<p><b>2.Юридическое лицо со стороны исполнителя</b><Br>
-	    	<input type="radio" name="CountOrgShortName" value="1"> ЧУП Промвад<Br>
-		<input type="radio" name="CountOrgShortName" value="2"> ООО Промвад Софт<Br>
-		<input type="radio" name="CountOrgShortName" value="3"> ПРВ Инжиниринг<Br>
-
-	<p><b>3.Выбор подписанта со стороны исполнителя</b><Br>
-	    	<input type="radio" name="podpis_name" value="1"> Якубович Д.М.<Br>
-		<input type="radio" name="podpis_name" value="2"> Ковалев С.Н.<Br>
-	    	<input type="radio" name="podpis_name" value="3"> Мозолевский В.В.<Br>
-		<input type="radio" name="podpis_name" value="4"> Лиштван Ю.Н.<Br>
-	    	<input type="radio" name="podpis_name" value="5"> Кутень И.С.<Br>
-		<input type="radio" name="podpis_name" value="6"> Ковалев С.К.<Br>
-
-	<p><b>4.Место составления договора</b><Br>
-	    	<input type="radio" name="place" value="1"> Минск <Br>
-		<input type="radio" name="place" value="2"> Москва <Br>
-
-  	<p><b>5.Дата договора</b>
-		<input type="text" name="data_dogovor"><Br>
-
-  	<p><b>6.Информация о Заказчике</b><Br>
-		<input type="text" name="CustOrgFullName"><Br>
-		<input type="text" name="CustOrgShortName"><Br>
-		<input type="text" name="CustBankDetails"><Br>
-
-	<p><b>7.Информация о представителе Заказчика</b><Br>  	
-		<p>Должность подписанта со стороны  Заказчика<Br><input type="text" name="CustPost"><Br>
-		<p>Должность подписанта Заказчика в родительном падеже<Br><input type="text" name="RCustPost"><Br>
-		<p>Фамилия подписанта со стороны заказчика<Br><input type="text" name="CustLastName"><Br>
-		<p>Полное ФИО заказчика в родительном падеже<Br><input type="text" name="RCustFullName"><Br>
-		<p>Инициалы представителя Заказчика<Br><input type="text" name="CustInitials"><Br>
-		<p>Представитель Заказчика действующего на основании<Br><input type="radio" name="CustBase" value="1"> Устава<Br>
-		<input type="radio" name="CustBase" value="2"> доверенности №<Br>
-
-	<p><b>8.НДС</b><Br>
-		<input type="radio" name="VatRate" value="1"> Стоимость работ без НДС<Br>  
-	    	<input type="radio" name="VatRate" value="2"> 18% (для РФ)<Br>
-		<input type="radio" name="VatRate" value="3"> 20% (для РБ )<Br>
-		<p>НДС<Br><input type="text" name="VatRate_keyboard"><Br>
-
-	<p><b>9.Валюта платежа</b><Br>
-		<p>Валюта по договору<Br>
-		<input type="radio" name="AgrCurrency" value="1">USD<Br>  
-	    	<input type="radio" name="AgrCurrency" value="2">EUR<Br>
-		<input type="radio" name="AgrCurrency" value="3">RUR<Br>
-		<input type="radio" name="AgrCurrency" value="4">BRB<Br>
-		<p>Валюта платежа<Br>
-		<input type="radio" name="CurrencyPayment" value="1">USD<Br>  
-	    	<input type="radio" name="CurrencyPayment" value="2">EUR<Br>
-		<input type="radio" name="CurrencyPayment" value="3">RUR<Br>
-		<input type="radio" name="CurrencyPayment" value="4">BRB<Br>
-
-	<p><b>10.Сумма по  договору</b><Br>
-		<p>Сумма по  договору<Br>
-		<input type="text" name="summa_dogovor"><Br>
- 
-		<input type="submit" class="btn" value="Click" name="mybtn">
-		<input type="reset">
-
-	</form>
 
 	{% endif %}
 
 	{% if document_selected == "3" %}
-	<form action="#" method="get">
 
- 	<p><b>1.Номер договора</b>
-		<input type="text" name="number_dogovor"><Br>
-
-	<p><b>2.Юридическое лицо со стороны исполнителя</b><Br>
-	    	<input type="radio" name="CountOrgShortName" value="1"> ЧУП Промвад<Br>
-		<input type="radio" name="CountOrgShortName" value="2"> ООО Промвад Софт<Br>
-		<input type="radio" name="CountOrgShortName" value="3"> ПРВ Инжиниринг<Br>
-
-	<p><b>3.Выбор подписанта со стороны исполнителя</b><Br>
-	    	<input type="radio" name="podpis_name" value="1"> Якубович Д.М.<Br>
-		<input type="radio" name="podpis_name" value="2"> Ковалев С.Н.<Br>
-	    	<input type="radio" name="podpis_name" value="3"> Мозолевский В.В.<Br>
-		<input type="radio" name="podpis_name" value="4"> Лиштван Ю.Н.<Br>
-	    	<input type="radio" name="podpis_name" value="5"> Кутень И.С.<Br>
-		<input type="radio" name="podpis_name" value="6"> Ковалев С.К.<Br>
-
-	<p><b>4.Место составления договора</b><Br>
-	    	<input type="radio" name="place" value="1"> Минск <Br>
-		<input type="radio" name="place" value="2"> Москва <Br>
-
-  	<p><b>5.Дата договора</b>
-		<input type="text" name="data_dogovor"><Br>
-
-  	<p><b>6.Информация о Заказчике</b><Br>
-		<input type="text" name="CustOrgFullName"><Br>
-		<input type="text" name="CustOrgShortName"><Br>
-		<input type="text" name="CustBankDetails"><Br>
-
-	<p><b>7.Информация о представителе Заказчика</b><Br>  	
-		<p>Должность подписанта со стороны  Заказчика<Br><input type="text" name="CustPost"><Br>
-		<p>Должность подписанта Заказчика в родительном падеже<Br><input type="text" name="RCustPost"><Br>
-		<p>Фамилия подписанта со стороны заказчика<Br><input type="text" name="CustLastName"><Br>
-		<p>Полное ФИО заказчика в родительном падеже<Br><input type="text" name="RCustFullName"><Br>
-		<p>Инициалы представителя Заказчика<Br><input type="text" name="CustInitials"><Br>
-		<p>Представитель Заказчика действующего на основании<Br><input type="radio" name="CustBase" value="1"> Устава<Br>
-		<input type="radio" name="CustBase" value="2"> доверенности №<Br>
-
-	<p><b>8.НДС</b><Br>
-		<input type="radio" name="VatRate" value="1"> Стоимость работ без НДС<Br>  
-	    	<input type="radio" name="VatRate" value="2"> 18% (для РФ)<Br>
-		<input type="radio" name="VatRate" value="3"> 20% (для РБ )<Br>
-		<p>НДС<Br><input type="text" name="VatRate_keyboard"><Br>
-
-	<p><b>9.Валюта платежа</b><Br>
-		<p>Валюта по договору<Br>
-		<input type="radio" name="AgrCurrency" value="1">USD<Br>  
-	    	<input type="radio" name="AgrCurrency" value="2">EUR<Br>
-		<input type="radio" name="AgrCurrency" value="3">RUR<Br>
-		<input type="radio" name="AgrCurrency" value="4">BRB<Br>
-		<p>Валюта платежа<Br>
-		<input type="radio" name="CurrencyPayment" value="1">USD<Br>  
-	    	<input type="radio" name="CurrencyPayment" value="2">EUR<Br>
-		<input type="radio" name="CurrencyPayment" value="3">RUR<Br>
-		<input type="radio" name="CurrencyPayment" value="4">BRB<Br>
-
-	<p><b>10.Сумма по  договору</b><Br>
-		<p>Сумма по  договору<Br>
-		<input type="text" name="summa_dogovor"><Br>
- 
-		<input type="submit" class="btn" value="Click" name="mybtn">
-		<input type="reset">
-
-	</form>
 	{% endif %}
 
 	{% if document_selected == "4" %}
-	<form action="#" method="get">
 
- 	<p><b>1.Номер договора</b>
-		<input type="text" name="number_dogovor"><Br>
-
-	<p><b>2.Юридическое лицо со стороны исполнителя</b><Br>
-	    	<input type="radio" name="CountOrgShortName" value="1"> ЧУП Промвад<Br>
-		<input type="radio" name="CountOrgShortName" value="2"> ООО Промвад Софт<Br>
-		<input type="radio" name="CountOrgShortName" value="3"> ПРВ Инжиниринг<Br>
-
-	<p><b>3.Выбор подписанта со стороны исполнителя</b><Br>
-	    	<input type="radio" name="podpis_name" value="1"> Якубович Д.М.<Br>
-		<input type="radio" name="podpis_name" value="2"> Ковалев С.Н.<Br>
-	    	<input type="radio" name="podpis_name" value="3"> Мозолевский В.В.<Br>
-		<input type="radio" name="podpis_name" value="4"> Лиштван Ю.Н.<Br>
-	    	<input type="radio" name="podpis_name" value="5"> Кутень И.С.<Br>
-		<input type="radio" name="podpis_name" value="6"> Ковалев С.К.<Br>
-
-	<p><b>4.Место составления договора</b><Br>
-	    	<input type="radio" name="place" value="1"> Минск <Br>
-		<input type="radio" name="place" value="2"> Москва <Br>
-
-  	<p><b>5.Дата договора</b>
-		<input type="text" name="data_dogovor"><Br>
-
-  	<p><b>6.Информация о Заказчике</b><Br>
-		<input type="text" name="CustOrgFullName"><Br>
-		<input type="text" name="CustOrgShortName"><Br>
-		<input type="text" name="CustBankDetails"><Br>
-
-	<p><b>7.Информация о представителе Заказчика</b><Br>  	
-		<p>Должность подписанта со стороны  Заказчика<Br><input type="text" name="CustPost"><Br>
-		<p>Должность подписанта Заказчика в родительном падеже<Br><input type="text" name="RCustPost"><Br>
-		<p>Фамилия подписанта со стороны заказчика<Br><input type="text" name="CustLastName"><Br>
-		<p>Полное ФИО заказчика в родительном падеже<Br><input type="text" name="RCustFullName"><Br>
-		<p>Инициалы представителя Заказчика<Br><input type="text" name="CustInitials"><Br>
-		<p>Представитель Заказчика действующего на основании<Br><input type="radio" name="CustBase" value="1"> Устава<Br>
-		<input type="radio" name="CustBase" value="2"> доверенности №<Br>
-
-	<p><b>8.НДС</b><Br>
-		<input type="radio" name="VatRate" value="1"> Стоимость работ без НДС<Br>  
-	    	<input type="radio" name="VatRate" value="2"> 18% (для РФ)<Br>
-		<input type="radio" name="VatRate" value="3"> 20% (для РБ )<Br>
-		<p>НДС<Br><input type="text" name="VatRate_keyboard"><Br>
-
-	<p><b>9.Валюта платежа</b><Br>
-		<p>Валюта по договору<Br>
-		<input type="radio" name="AgrCurrency" value="1">USD<Br>  
-	    	<input type="radio" name="AgrCurrency" value="2">EUR<Br>
-		<input type="radio" name="AgrCurrency" value="3">RUR<Br>
-		<input type="radio" name="AgrCurrency" value="4">BRB<Br>
-		<p>Валюта платежа<Br>
-		<input type="radio" name="CurrencyPayment" value="1">USD<Br>  
-	    	<input type="radio" name="CurrencyPayment" value="2">EUR<Br>
-		<input type="radio" name="CurrencyPayment" value="3">RUR<Br>
-		<input type="radio" name="CurrencyPayment" value="4">BRB<Br>
-
-	<p><b>10.Сумма по  договору</b><Br>
-		<p>Сумма по  договору<Br>
-		<input type="text" name="summa_dogovor"><Br>
- 
-		<input type="submit" class="btn" value="Click" name="mybtn">
-		<input type="reset">
-
-	</form>
 	{% endif %}
 
 	{% if document_selected == "5" %}
-			<form action="#" method="get">
 
- 	<p><b>1.Номер договора</b>
-		<input type="text" name="number_dogovor"><Br>
-
-	<p><b>2.Юридическое лицо со стороны исполнителя</b><Br>
-	    	<input type="radio" name="CountOrgShortName" value="1"> ЧУП Промвад<Br>
-		<input type="radio" name="CountOrgShortName" value="2"> ООО Промвад Софт<Br>
-		<input type="radio" name="CountOrgShortName" value="3"> ПРВ Инжиниринг<Br>
-
-	<p><b>3.Выбор подписанта со стороны исполнителя</b><Br>
-	    	<input type="radio" name="podpis_name" value="1"> Якубович Д.М.<Br>
-		<input type="radio" name="podpis_name" value="2"> Ковалев С.Н.<Br>
-	    	<input type="radio" name="podpis_name" value="3"> Мозолевский В.В.<Br>
-		<input type="radio" name="podpis_name" value="4"> Лиштван Ю.Н.<Br>
-	    	<input type="radio" name="podpis_name" value="5"> Кутень И.С.<Br>
-		<input type="radio" name="podpis_name" value="6"> Ковалев С.К.<Br>
-
-	<p><b>4.Место составления договора</b><Br>
-	    	<input type="radio" name="place" value="1"> Минск <Br>
-		<input type="radio" name="place" value="2"> Москва <Br>
-
-  	<p><b>5.Дата договора</b>
-		<input type="text" name="data_dogovor"><Br>
-
-  	<p><b>6.Информация о Заказчике</b><Br>
-		<input type="text" name="CustOrgFullName"><Br>
-		<input type="text" name="CustOrgShortName"><Br>
-		<input type="text" name="CustBankDetails"><Br>
-
-	<p><b>7.Информация о представителе Заказчика</b><Br>  	
-		<p>Должность подписанта со стороны  Заказчика<Br><input type="text" name="CustPost"><Br>
-		<p>Должность подписанта Заказчика в родительном падеже<Br><input type="text" name="RCustPost"><Br>
-		<p>Фамилия подписанта со стороны заказчика<Br><input type="text" name="CustLastName"><Br>
-		<p>Полное ФИО заказчика в родительном падеже<Br><input type="text" name="RCustFullName"><Br>
-		<p>Инициалы представителя Заказчика<Br><input type="text" name="CustInitials"><Br>
-		<p>Представитель Заказчика действующего на основании<Br><input type="radio" name="CustBase" value="1"> Устава<Br>
-		<input type="radio" name="CustBase" value="2"> доверенности №<Br>
-
-	<p><b>8.НДС</b><Br>
-		<input type="radio" name="VatRate" value="1"> Стоимость работ без НДС<Br>  
-	    	<input type="radio" name="VatRate" value="2"> 18% (для РФ)<Br>
-		<input type="radio" name="VatRate" value="3"> 20% (для РБ )<Br>
-		<p>НДС<Br><input type="text" name="VatRate_keyboard"><Br>
-
-	<p><b>9.Валюта платежа</b><Br>
-		<p>Валюта по договору<Br>
-		<input type="radio" name="AgrCurrency" value="1">USD<Br>  
-	    	<input type="radio" name="AgrCurrency" value="2">EUR<Br>
-		<input type="radio" name="AgrCurrency" value="3">RUR<Br>
-		<input type="radio" name="AgrCurrency" value="4">BRB<Br>
-		<p>Валюта платежа<Br>
-		<input type="radio" name="CurrencyPayment" value="1">USD<Br>  
-	    	<input type="radio" name="CurrencyPayment" value="2">EUR<Br>
-		<input type="radio" name="CurrencyPayment" value="3">RUR<Br>
-		<input type="radio" name="CurrencyPayment" value="4">BRB<Br>
-
-	<p><b>10.Сумма по  договору</b><Br>
-		<p>Сумма по  договору<Br>
-		<input type="text" name="summa_dogovor"><Br>
- 
-		<input type="submit" class="btn" value="Click" name="mybtn">
-		<input type="reset">
-
-	</form>
 	{% endif %}
 
 	{% if document_selected == "6" %}
-	<form action="#" method="get">
 
- 	<p><b>1.Номер договора</b>
-		<input type="text" name="number_dogovor"><Br>
-
-	<p><b>2.Юридическое лицо со стороны исполнителя</b><Br>
-	    	<input type="radio" name="CountOrgShortName" value="1"> ЧУП Промвад<Br>
-		<input type="radio" name="CountOrgShortName" value="2"> ООО Промвад Софт<Br>
-		<input type="radio" name="CountOrgShortName" value="3"> ПРВ Инжиниринг<Br>
-
-	<p><b>3.Выбор подписанта со стороны исполнителя</b><Br>
-	    	<input type="radio" name="podpis_name" value="1"> Якубович Д.М.<Br>
-		<input type="radio" name="podpis_name" value="2"> Ковалев С.Н.<Br>
-	    	<input type="radio" name="podpis_name" value="3"> Мозолевский В.В.<Br>
-		<input type="radio" name="podpis_name" value="4"> Лиштван Ю.Н.<Br>
-	    	<input type="radio" name="podpis_name" value="5"> Кутень И.С.<Br>
-		<input type="radio" name="podpis_name" value="6"> Ковалев С.К.<Br>
-
-	<p><b>4.Место составления договора</b><Br>
-	    	<input type="radio" name="place" value="1"> Минск <Br>
-		<input type="radio" name="place" value="2"> Москва <Br>
-
-  	<p><b>5.Дата договора</b>
-		<input type="text" name="data_dogovor"><Br>
-
-  	<p><b>6.Информация о Заказчике</b><Br>
-		<input type="text" name="CustOrgFullName"><Br>
-		<input type="text" name="CustOrgShortName"><Br>
-		<input type="text" name="CustBankDetails"><Br>
-
-	<p><b>7.Информация о представителе Заказчика</b><Br>  	
-		<p>Должность подписанта со стороны  Заказчика<Br><input type="text" name="CustPost"><Br>
-		<p>Должность подписанта Заказчика в родительном падеже<Br><input type="text" name="RCustPost"><Br>
-		<p>Фамилия подписанта со стороны заказчика<Br><input type="text" name="CustLastName"><Br>
-		<p>Полное ФИО заказчика в родительном падеже<Br><input type="text" name="RCustFullName"><Br>
-		<p>Инициалы представителя Заказчика<Br><input type="text" name="CustInitials"><Br>
-		<p>Представитель Заказчика действующего на основании<Br><input type="radio" name="CustBase" value="1"> Устава<Br>
-		<input type="radio" name="CustBase" value="2"> доверенности №<Br>
-
-	<p><b>8.НДС</b><Br>
-		<input type="radio" name="VatRate" value="1"> Стоимость работ без НДС<Br>  
-	    	<input type="radio" name="VatRate" value="2"> 18% (для РФ)<Br>
-		<input type="radio" name="VatRate" value="3"> 20% (для РБ )<Br>
-		<p>НДС<Br><input type="text" name="VatRate_keyboard"><Br>
-
-	<p><b>9.Валюта платежа</b><Br>
-		<p>Валюта по договору<Br>
-		<input type="radio" name="AgrCurrency" value="1">USD<Br>  
-	    	<input type="radio" name="AgrCurrency" value="2">EUR<Br>
-		<input type="radio" name="AgrCurrency" value="3">RUR<Br>
-		<input type="radio" name="AgrCurrency" value="4">BRB<Br>
-		<p>Валюта платежа<Br>
-		<input type="radio" name="CurrencyPayment" value="1">USD<Br>  
-	    	<input type="radio" name="CurrencyPayment" value="2">EUR<Br>
-		<input type="radio" name="CurrencyPayment" value="3">RUR<Br>
-		<input type="radio" name="CurrencyPayment" value="4">BRB<Br>
-
-	<p><b>10.Сумма по  договору</b><Br>
-		<p>Сумма по  договору<Br>
-		<input type="text" name="summa_dogovor"><Br>
- 
-		<input type="submit" class="btn" value="Click" name="mybtn">
-		<input type="reset">
-
-	</form>
 	{% endif %}
 
 	{% if document_selected == "7" %}

@@ -1,9 +1,11 @@
 import os, tempfile, zipfile, re
 from django.shortcuts import render
 from django.shortcuts import render_to_response
-#from .models import Post
+from .models import Post
 from django.utils.encoding import smart_str
 from django.core.servers.basehttp import FileWrapper
+from django.http import StreamingHttpResponse
+from django.http import FileResponse
 from django.conf import settings
 import mimetypes
 from docx import *
@@ -54,6 +56,7 @@ def documents(request, arg2, arg3):
 		RCustFullName = request.GET.get('RCustFullName')
 		CustInitials = request.GET.get('CustInitials')
 		place = request.GET.get('place')
+		place_dogovor_writing = request.GET.get('place_dogovor_writing')
 		CountOrgShortName = request.GET.get('CountOrgShortName')
 		VatRate = request.GET.get('VatRate')
 		AgrCurrency = request.GET.get('AgrCurrency')
@@ -64,12 +67,19 @@ def documents(request, arg2, arg3):
 		CustLastName = request.GET.get('CustLastName')
 		CustBase = request.GET.get('CustBase')
 		number_dogovor = request.GET.get('number_dogovor')
-		summa_dogovor = request.GET.get('summa_dogovor')
+		CostNum = request.GET.get('CostNum')
 		VatRate_keyboard = request.GET.get('VatRate_keyboard')
-
+		
+		AgrLaw = request.GET.get('AgrLaw')
+		ProductName = request.GET.get('ProductName')
+		ProductName_type = request.GET.get('ProductName_type')
+		CostPrePayment = request.GET.get('CostPrePayment')
+		CostPrePayment_type = request.GET.get('CostPrePayment_type')
+		ProductNameDetail = request.GET.get('ProductNameDetail')
+		
 		new_file_is = create_copy_fileshablon(namedoc)
 
-		writedata_indocfile(namedoc, data_dogovora, RCustFullName, CustOrgShortName, CustBankDetails, CustOrgFullName, CustInitials, place, CountOrgShortName, VatRate, AgrCurrency, CurrencyPayment, podpis_name, CustPost, RCustPost, CustLastName, CustBase, number_dogovor, summa_dogovor, VatRate_keyboard)
+		writedata_indocfile(new_file_is, data_dogovora, RCustFullName, CustOrgShortName, CustBankDetails, CustOrgFullName, CustInitials, place, CountOrgShortName, VatRate, AgrCurrency, CurrencyPayment, podpis_name, CustPost, RCustPost, CustLastName, CustBase, number_dogovor, CostNum, VatRate_keyboard, place_dogovor_writing, AgrLaw, ProductName, ProductName_type, CostPrePayment, CostPrePayment_type, ProductNameDetail)
 	else:
 		new_file_is = str()	
 		document_select = arg3
@@ -81,212 +91,17 @@ def request_page(request):
 	return render(request, 'saledoc/page_download.html', {'inform': datas})
 
 def send_file(request, fileURL):
-	# Select your file here.
-	#filenames = request.GET.get(fileURL)
-	filename = "saledoc\{}".format(fileURL)
-	download_name = "{}".format(fileURL)
-	wrapper = FileWrapper(open(filename))
-	content_type = mimetypes.guess_type(filename)[0]
-	response = HttpResponse(wrapper, content_type=content_type)
-	response['Content-Length'] = os.path.getsize(filename)    
+	# send file "fileURL" as response
+	filename = 'saledoc/{}'.format(fileURL)
+	download_name =  os.path.basename(filename)
+	chunk_size = 8192
+	response = StreamingHttpResponse(FileWrapper(open(filename	, 'rb'), chunk_size), content_type=mimetypes.guess_type(filename)[0])
+	response['Content-Length'] = os.path.getsize(filename)
 	response['Content-Disposition'] = "attachment; filename=%s" % download_name
 	return response
 
-send_file("http://192.168.1.4:8000/saledoc/Document1/saledoc/201610301712.docx", "201610301712.docx")
-
-def writedata_indocfile(namedoc, data_dogovora, CustOrgFullName, CustOrgShortName, CustBankDetails, RCustFullName, CustInitials, place, CountOrgShortName, VatRate, AgrCurrency, CurrencyPayment, podpis_name, CustPost, RCustPost, CustLastName, CustBase, number_dogovor, summa_dogovor, VatRate_keyboard):
-	
-	document = Document()
-	
-	# Proverka chemu raven parametr namedoc i formirovanie Imeni documenta.
-	if int(namedoc) == 1: 
-		document.add_heading('Шаблон договора на разработку рамочный', 0)
-	elif int(namedoc) == 2:
-		document.add_heading('Шаблон договора на разработку c фиксированной стоимостью', 0)
-	elif int(namedoc) == 3:
-		document.add_heading('Шаблон договора на разработку по схеме t&m', 0)
-	elif int(namedoc) == 4:
-		document.add_heading('Шаблон договора-оферты', 0)
-	elif int(namedoc) == 5:
-		document.add_heading('Шаблон договора на услуги (консультацию)', 0)
-	else:
-		document.add_heading('Шаблон договора на разработку дизайна', 0)
-
-	
-	document.add_heading('1. Номер договора №{}{}'.format(number_dogovor, data_vremya()), level=1)
-
-	# Proverka chemu raven parametr CountOrgShortName i formirovanie Uridicheckogo lica.
-	document.add_heading('2. Юридическое лицо со стороны исполнителя', level=1)
-
-	if int(CountOrgShortName) == 1: 
-		document.add_paragraph('ЧУП Промвад')
-	elif int(CountOrgShortName) == 2:
-		document.add_paragraph('ООО Промвад Софт')
-	else:
-		document.add_paragraph('ПРВ Инжиниринг')
-
-	# Proverka chemu raven parametr podpis_name i formirovanie Podpisivauchego lica.
-	document.add_heading('3. Выбор подписанта со стороны исполнителя', level=1)
-	if int(podpis_name) == 1: 
-		document.add_paragraph('Якубович Д.М.')
-		CountPost = "Директор"
-		RCountPost = "директора"
-		RCountPost = "директора"
-		CountLastName= "Якубович"
-		CountInitials = "Д.М.."
-		RCountFullName="Якубовича Дениса Михайловича"
-		CountBase= "Устава"
-		CountBaseNum=""
-		CountBaseDate = ""
-		CountOrgFullName= " Частное унитарное предприятие Промвад"
-		CountBankDetails= "220073, г. Минск, ул. Ольшевского, 20/11 Банк: ЗАО «Идея Банк» г.Минск,  БИК 153001755 УНП 191448150, ОКПО 379817905"
-	elif int(podpis_name) == 2:
-		document.add_paragraph('Ковалев С.Н.')
-		CountPost= "Заместитель директора по производству"
-		RCountPost = "заместителя директора по производству"
-		CountLastName= "Ковалев"
-		CountInitials = "С.Н."
-		RCountFullName="Ковалева Сергея Николаевича"
-		CountBase= "доверенности"
-		CountBaseNum="01-27/4336"
-		CountBaseDate = "25.06.2012"
-		CountOrgFullName= " Частное унитарное предприятие Промвад"
-		CountBankDetails= "220073, г. Минск, ул. Ольшевского, 20/11 Банк: ЗАО «Идея Банк» г.Минск,  БИК 153001755 УНП 191448150, ОКПО 379817905"
-	elif int(podpis_name) == 3:
-		document.add_paragraph('Мозолевский В.В.')
-		CountPost= "Директор"
-		RCountPost = "директора"
-		CountLastName= "Мозолевский"
-		CountInitials = "В.В."
-		RCountFullName="Мозолевского Виталия Владимировича"
-		CountBase= "Устава"
-		CountBaseNum=""
-		CountBaseDate = ""
-		CountOrgFullName= " Общество с ограниченной ответственностью «Промвад Софт»"
-		CountBankDetails= "220073, г. Минск, ул. Ольшевского, 20/11 Банк: ЗАО «Идея Банк» г.Минск,  БИК 153001755 УНП 191448150, ОКПО 379817905"
-	elif int(podpis_name) == 4:
-		document.add_paragraph('Лиштван Ю.Н.')
-		CountPost= "Заместитель директора по коммерческим вопросам"
-		RCountPost = "заместителя директора по коммерческим вопросам"
-		CountLastName= "Лиштван"
-		CountInitials = "Ю.Н."
-		RCountFullName="Лиштвана Юрия Николаевича"
-		CountBase= "доверенности"
-		CountBaseNum="1"
-		CountBaseDate = "03.01.2014"
-		CountOrgFullName= " Общество с ограниченной ответственностью «Промвад Софт»"
-		CountBankDetails= "220073, г. Минск, ул. Ольшевского, 20/11 Банк: ЗАО «Идея Банк» г.Минск,  БИК 153001755 УНП 191448150, ОКПО 379817905"
-	elif int(podpis_name) == 5:
-		document.add_paragraph('Кутень И.С.')
-		CountPost= "Директор"
-		RCountPost = "директора"
-		CountLastName= "Кутень"
-		CountInitials = "И.С."
-		RCountFullName="Кутеня Ивана Семеновича"
-		CountBase= "Устава"
-		CountBaseNum=""
-		CountBaseDate = ""
-		CountOrgFullName= " ПРВ Инжиниринг"
-		CountBankDetails= "220073, г. Минск, ул. Ольшевского, 20/11 Банк: ЗАО «Идея Банк» г.Минск,  БИК 153001755 УНП 191448150, ОКПО 379817905"
-	else:
-		document.add_paragraph('Ковалев С.К.')
-		CountPost= " Заместитель директора по производству "
-		RCountPost = " заместителя директора по производству "
-		CountLastName= " Ковалев "
-		CountInitials = "С.Н."
-		RCountFullName=" Ковалева Сергея Николаевича "
-		CountBase= "доверенности"
-		CountBaseNum="1"
-		CountBaseDate = "31.03.2015"
-		CountOrgFullName= " ПРВ Инжиниринг "
-		CountBankDetails= "220073, г. Минск, ул. Ольшевского, 20/11 Банк: ЗАО «Идея Банк» г.Минск,  БИК 153001755 УНП 191448150, ОКПО 379817905"
-
-	# Proverka chemu raven parametr place i formirovanie Mesta sostavleniya dogovora.
-	document.add_heading('4. Место составления договора', level=1)
-	if int(place) == 1: 
-		document.add_paragraph('Минск')
-	else:
-		document.add_paragraph('Москва')
-
-	document.add_heading('5. Дата договора {} {}'.format(data_dogovora, data_vremya()), level=1)
-
-	# Formirovanie informacii o zakazchike.
-	document.add_heading('6. �?нформация о Заказчике:', level=1)
-	document.add_paragraph(CustOrgFullName)
-	document.add_paragraph(CustOrgShortName)
-	document.add_paragraph(CustBankDetails)
-
-
-	# Proverka chemu raven parametr CustBase i formirovanie informacii o predstavitele zakazchika.
-	document.add_heading('7. �?нформация о представителе Заказчика', level=1)
-	document.add_paragraph(CustPost)
-	document.add_paragraph(RCustPost)
-	document.add_paragraph(CustLastName)
-	document.add_paragraph(RCustFullName)
-	document.add_paragraph(CustInitials)
-	if int(CustBase) == 1: 
-		document.add_paragraph('Устава')
-	else:
-		document.add_paragraph('доверенности №')
-
-	# Proverka chemu raven parametr VatRate informacia o NDS.
-	document.add_heading('8. НДС {}'.format(VatRate), level=1)
-	if int(VatRate) == 1: 
-		document.add_paragraph('Стоимость работ без НДС')
-	elif int(VatRate) == 2:
-		document.add_paragraph('18% (для РФ)')
-	else:
-		document.add_paragraph('20% (для РБ )')
-	document.add_paragraph(VatRate_keyboard)
-
-	# Informaziya o valute i summe po dogovory.
-	document.add_heading('9. Валюта платежа', level=1)
-	document.add_paragraph('Валюта по договору')
-	if int(AgrCurrency) == 1: 
-		document.add_paragraph('USD')
-		AgrCurrency_ = "долларах США"
-	elif int(AgrCurrency) == 2:
-		document.add_paragraph('EUR')
-		AgrCurrency_ = "Евро"
-	elif int(AgrCurrency) == 3:
-		document.add_paragraph('RUR')
-		AgrCurrency_ = "российских рублях"
-	else:
-		document.add_paragraph('BRB')
-		AgrCurrency_ = "белорусских рублях"
-
-	document.add_paragraph('Валюта платежа')
-	if int(CurrencyPayment) == 1: 
-		document.add_paragraph('USD')
-		CurrencyPayment_ = "доллары США"
-	elif int(CurrencyPayment) == 2:
-		document.add_paragraph('EUR')
-		CurrencyPayment_ = "Евро"
-	elif int(CurrencyPayment) == 3:
-		document.add_paragraph('RUR')
-		CurrencyPayment_ = "российский рубль"
-	else:
-		document.add_paragraph('BRB')
-		CurrencyPayment_ = "белорусский рубль"
-		
-	if int(CurrencyPayment) == 3 and int(AgrCurrency) == 3:
-		CurrencyText = "В случае изменения курса российского рубля по отношению к доллару США на день выставления счета по сравнению с курсом на дату заключения настоящего договора,  Исполнитель вправе проиндексировать сумму настоящего договора в части невыставленных счетов путем пересчета суммы счета в доллары США по курсу ЦБРФ на день подписания  настоящего договора и последующего пересчета в российские рубли по курсу ЦБРФ на день выставления счета. Кроме того, в случае нарушения срока оплаты согласно настоящего договора, Исполнитель вправе пересчитать сумму выставленного, но неоплаченного счета и перевыставить счет с учетом корректировки."
-	elif int(CurrencyPayment) == 4 and int(AgrCurrency) == 4:
-		CurrencyText = "В случае изменения курса белорусского рубля по отношению к доллару США на день выставления счета по сравнению с курсом на дату заключения настоящего договора,  Исполнитель вправе проиндексировать сумму настоящего договора в части невыставленных счетов путем пересчета суммы счета в доллары США по курсу НБРБ на день подписания  настоящего договора и последующего пересчета в белорусские рубли по курсу НБРБ на день выставления счета. Кроме того, в случае нарушения срока оплаты согласно настоящего договора, Исполнитель вправе пересчитать сумму выставленного, но неоплаченного счета и перевыставить счет с учетом корректировки."
-	else:
-		CurrencyText = ""
-			
-	# Informaziya o summe dogovora.
-	document.add_heading('10.Сумма по  договору {}', level=1)
-	document.add_paragraph(string_to_writenumber(int(summa_dogovor)))
-
-	document.add_page_break()
-	document.save('saledoc/static/doc.docx')
-	# document.save('saledoc/static/doc{}.docx'.format(data_vremya()))
-	return
-
 def string_to_writenumber(summa_dogovor):
-	# Preobrazovanie is chisla v propis.
+	# change format style from number into write number.
 	ZERO = "ноль"
 	
 	L_1_HE = HE = [ZERO, "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять", "десять",
@@ -406,4 +221,197 @@ def replace_string(filename, old_info, new_info):
 
     doc.save(filename)
     return 1
+   
+def writedata_indocfile(new_file_is, data_dogovora, CustOrgFullName, CustOrgShortName, CustBankDetails, RCustFullName, CustInitials, place, CountOrgShortName, VatRate, AgrCurrency, CurrencyPayment, podpis_name, CustPost, RCustPost, CustLastName, CustBase, number_dogovor, CostNum, VatRate_keyboard, place_dogovor_writing, AgrLaw, ProductName, ProductName_type, CostPrePayment, CostPrePayment_type, ProductNameDetail):
+	
+	# Generating number of document
+	replace_string(new_file_is, 'AgrNum_', 'ДОГОВОР №{}'.format(data_vremya()))
+
+	# Check param "CountOrgShortName" and replace in doc file "CountOrgShortName_"
+	if int(CountOrgShortName) == 1:
+		replace_string(new_file_is, 'CountOrgShortName_', 'ЧУП Промвад') 
+	elif int(CountOrgShortName) == 2:
+		replace_string(new_file_is, 'CountOrgShortName_', 'ООО Промвад Софт')
+	else:
+		replace_string(new_file_is, 'CountOrgShortName_', 'ПРВ Инжиниринг')
+
+	# Check param "podpis_name" and replace in doc file "CountPost_,RCountPost_,CountLastName_, CountInitials_, RCountFullName_, RCountFullName_, CountBase_, CountBaseNum_, CountBaseDate_, CountOrgFullName_, CountBankDetails_"
+	if int(podpis_name) == 1:
+		replace_string(new_file_is, 'CountPost_', 'Директор') 
+		replace_string(new_file_is, 'RCountPost_', 'директора')
+		replace_string(new_file_is, 'CountLastName_', 'Якубович')
+		replace_string(new_file_is, 'CountInitials_', 'Д.М.')
+		replace_string(new_file_is, 'RCountFullName_', 'Якубовича Дениса Михайловича')
+		replace_string(new_file_is, 'CountBase_', 'Устава')
+		replace_string(new_file_is, 'CountBaseNum_', '')
+		replace_string(new_file_is, 'CountBaseDate_', '')
+		replace_string(new_file_is, 'CountOrgFullName_', 'Частное унитарное предприятие Промвад')
+		replace_string(new_file_is, 'CountBankDetails_', '220073, г. Минск, ул. Ольшевского, 20/11 Банк: ЗАО «Идея Банк» г.Минск,  БИК 153001755 УНП 191448150, ОКПО 379817905')
+	elif int(podpis_name) == 2:
+		replace_string(new_file_is, 'CountPost_', 'Заместитель директора по производству') 
+		replace_string(new_file_is, 'RCountPost_', 'заместителя директора по производству')
+		replace_string(new_file_is, 'CountLastName_', 'Ковалев')
+		replace_string(new_file_is, 'CountInitials_', 'С.Н.')
+		replace_string(new_file_is, 'RCountFullName_', 'Ковалева Сергея Николаевича')
+		replace_string(new_file_is, 'CountBase_', 'доверенности')
+		replace_string(new_file_is, 'CountBaseNum_', '01-27/4336')
+		replace_string(new_file_is, 'CountBaseDate_', '25.06.2012')
+		replace_string(new_file_is, 'CountOrgFullName_', 'Частное унитарное предприятие Промвад')
+		replace_string(new_file_is, 'CountBankDetails_', '220073, г. Минск, ул. Ольшевского, 20/11 Банк: ЗАО «Идея Банк» г.Минск,  БИК 153001755 УНП 191448150, ОКПО 379817905')
+	elif int(podpis_name) == 3:
+		replace_string(new_file_is, 'CountPost_', 'Директор') 
+		replace_string(new_file_is, 'RCountPost_', 'директора')
+		replace_string(new_file_is, 'CountLastName_', 'Мозолевский')
+		replace_string(new_file_is, 'CountInitials_', 'В.В.')
+		replace_string(new_file_is, 'RCountFullName_', 'Мозолевского Виталия Владимировича')
+		replace_string(new_file_is, 'CountBase_', 'Устава')
+		replace_string(new_file_is, 'CountBaseNum_', '')
+		replace_string(new_file_is, 'CountBaseDate_', '')
+		replace_string(new_file_is, 'CountOrgFullName_', 'Общество с ограниченной ответственностью «Промвад Софт»')
+		replace_string(new_file_is, 'CountBankDetails_', '220073, г. Минск, ул. Ольшевского, 20/11 Банк: ЗАО «Идея Банк» г.Минск,  БИК 153001755 УНП 191448150, ОКПО 379817905')
+	elif int(podpis_name) == 4:
+		replace_string(new_file_is, 'CountPost_', 'Заместитель директора по коммерческим вопросам') 
+		replace_string(new_file_is, 'RCountPost_', 'заместителя директора по коммерческим вопросам')
+		replace_string(new_file_is, 'CountLastName_', 'Лиштван')
+		replace_string(new_file_is, 'CountInitials_', 'Ю.Н.')
+		replace_string(new_file_is, 'RCountFullName_', 'Лиштвана Юрия Николаевича')
+		replace_string(new_file_is, 'CountBase_', 'доверенности')
+		replace_string(new_file_is, 'CountBaseNum_', '1')
+		replace_string(new_file_is, 'CountBaseDate_', '03.01.2014')
+		replace_string(new_file_is, 'CountOrgFullName_', 'Общество с ограниченной ответственностью «Промвад Софт»')
+		replace_string(new_file_is, 'CountBankDetails_', '220073, г. Минск, ул. Ольшевского, 20/11 Банк: ЗАО «Идея Банк» г.Минск,  БИК 153001755 УНП 191448150, ОКПО 379817905')
+	elif int(podpis_name) == 5:
+		replace_string(new_file_is, 'CountPost_', 'Директор') 
+		replace_string(new_file_is, 'RCountPost_', 'директора')
+		replace_string(new_file_is, 'CountLastName_', 'Кутень')
+		replace_string(new_file_is, 'CountInitials_', 'И.С.')
+		replace_string(new_file_is, 'RCountFullName_', 'Кутеня Ивана Семеновича')
+		replace_string(new_file_is, 'CountBase_', 'Устава')
+		replace_string(new_file_is, 'CountBaseNum_', '')
+		replace_string(new_file_is, 'CountBaseDate_', '')
+		replace_string(new_file_is, 'CountOrgFullName_', 'ПРВ Инжиниринг')
+		replace_string(new_file_is, 'CountBankDetails_', '220073, г. Минск, ул. Ольшевского, 20/11 Банк: ЗАО «Идея Банк» г.Минск,  БИК 153001755 УНП 191448150, ОКПО 379817905')
+	else:
+		replace_string(new_file_is, 'CountPost_', 'Заместитель директора по производству ') 
+		replace_string(new_file_is, 'RCountPost_', 'заместителя директора по производству ')
+		replace_string(new_file_is, 'CountLastName_', 'Ковалев')
+		replace_string(new_file_is, 'CountInitials_', 'С.Н.')
+		replace_string(new_file_is, 'RCountFullName_', 'Ковалева Сергея Николаевича ')
+		replace_string(new_file_is, 'CountBase_', 'доверенности')
+		replace_string(new_file_is, 'CountBaseNum_', '1')
+		replace_string(new_file_is, 'CountBaseDate_', '31.03.2015')
+		replace_string(new_file_is, 'CountOrgFullName_', 'ПРВ Инжиниринг')
+		replace_string(new_file_is, 'CountBankDetails_', '220073, г. Минск, ул. Ольшевского, 20/11 Банк: ЗАО «Идея Банк» г.Минск,  БИК 153001755 УНП 191448150, ОКПО 379817905')
+
+	# Check param "place" and replace in doc file "AgrCity_"
+	document.add_heading('4. Место составления договора', level=1)
+	if int(place) == 1: 
+		replace_string(new_file_is, 'AgrCity_', 'Минск')
+	elif int(place) == 2:
+		replace_string(new_file_is, 'AgrCity_', 'Москва')
+	else:
+		replace_string(new_file_is, 'AgrCity_', place_dogovor_writing)
+
+	# Generating data of document
+	replace_string(new_file_is, 'AgrDate_', '{}'.format(data_vremya()))
+
+	# Check param "CustOrgFullName, CustOrgShortName, CustBankDetails" and replace in doc file "CustOrgFullName_, CustOrgShortName_, CustBankDetails_"
+	replace_string(new_file_is, 'CustOrgFullName_', CustOrgFullName)
+	replace_string(new_file_is, 'CustOrgShortName_', CustOrgShortName)
+	replace_string(new_file_is, 'CustBankDetails_', CustBankDetails)
+
+	# Check param "CustPost, RCustPost, CustLastName, RCustFullName, CustInitials" and replace in doc file "CustPost_, RCustPost_, CustLastName_, RCustFullName_, CustInitials_"
+	# Proverka chemu raven parametr CustBase i formirovanie informacii o predstavitele zakazchika.
+	replace_string(new_file_is, 'CustPost_', CustPost)
+	replace_string(new_file_is, 'RCustPost_', RCustPost)
+	replace_string(new_file_is, 'CustLastName_', CustLastName)
+	replace_string(new_file_is, 'RCustFullName_', RCustFullName)
+	replace_string(new_file_is, 'CustInitials_', CustInitials)
+
+	if int(CustBase) == 1: 
+		replace_string(new_file_is, 'CustBase_', 'Устава')
+	else:
+		replace_string(new_file_is, 'CustBase_', 'доверенности №')
+
+	# Check param "VatRate" and replace in doc file "VatRate_"
+	if int(VatRate) == 1:
+		rate = 0 
+		replace_string(new_file_is, 'VatRate_', 'Стоимость работ без НДС')
+	elif int(VatRate) == 2:
+		rate = 18
+		replace_string(new_file_is, 'VatRate_', '18% (для РФ)')
+	elif int(VatRate) == 3:
+		rate = 20
+		replace_string(new_file_is, 'VatRate_', '20% (для РБ')
+	else:
+		replace_string(new_file_is, 'VatRate_', VatRate_keyboard)
+		rate = int(VatRate_keyboard)
+
+	# Check param "AgrCurrency" and replace in doc file "AgrCurrency_".
+	if int(AgrCurrency) == 1:
+		replace_string(new_file_is, 'AgrCurrency_', 'долларах США') 
+		replace_string(new_file_is, 'CountRS_', 'р/с 3012082311015 SWIFT: SOMA BY 22 Банк-корреспондент: Deutsche bank AG, Frankfurt am Main SWIFT DEUTDEFF Номер счета, валюта: 10094779510000')
+	elif int(AgrCurrency) == 2:
+		replace_string(new_file_is, 'AgrCurrency_', 'Евро')
+		replace_string(new_file_is, 'CountRS_', 'р/с 3012082311015 SWIFT: SOMA BY 22 Банк-корреспондент: Deutsche bank AG, Frankfurt am Main SWIFT DEUTDEFF Номер счета, валюта: 10094779510000')
+	elif int(AgrCurrency) == 3:
+		replace_string(new_file_is, 'AgrCurrency_', 'российских рублях')
+		replace_string(new_file_is, 'CountRS_', 'р/с 3012082311015 SWIFT: SOMA BY 22 Банк-корреспондент: Deutsche bank AG, Frankfurt am Main SWIFT DEUTDEFF Номер счета, валюта: 10094779510000')
+	else:
+		replace_string(new_file_is, 'AgrCurrency_', 'белорусских рублях')
+		replace_string(new_file_is, 'CountRS_', 'р/с 3012082311015 SWIFT: SOMA BY 22 Банк-корреспондент: Deutsche bank AG, Frankfurt am Main SWIFT DEUTDEFF Номер счета, валюта: 10094779510000')
+
+	if int(CurrencyPayment) == 1: 
+		replace_string(new_file_is, 'CurrencyPayment_', 'доллары США')
+	elif int(CurrencyPayment) == 2:
+		replace_string(new_file_is, 'CurrencyPayment_', 'Евро')
+	elif int(CurrencyPayment) == 3:
+		replace_string(new_file_is, 'CurrencyPayment_', 'российский рубль')
+	else:
+		replace_string(new_file_is, 'CurrencyPayment_', 'белорусский рубль')
+
+		
+	if int(CurrencyPayment) == 3 and int(AgrCurrency) == 3:
+		replace_string(new_file_is, 'CurrencyText_', 'В случае изменения курса российского рубля по отношению к доллару США на день выставления счета по сравнению с курсом на дату заключения настоящего договора,  Исполнитель вправе проиндексировать сумму настоящего договора в части невыставленных счетов путем пересчета суммы счета в доллары США по курсу ЦБРФ на день подписания  настоящего договора и последующего пересчета в российские рубли по курсу ЦБРФ на день выставления счета. Кроме того, в случае нарушения срока оплаты согласно настоящего договора, Исполнитель вправе пересчитать сумму выставленного, но неоплаченного счета и перевыставить счет с учетом корректировки.')
+	elif int(CurrencyPayment) == 4 and int(AgrCurrency) == 4:
+		replace_string(new_file_is, 'CurrencyText_', 'В случае изменения курса белорусского рубля по отношению к доллару США на день выставления счета по сравнению с курсом на дату заключения настоящего договора,  Исполнитель вправе проиндексировать сумму настоящего договора в части невыставленных счетов путем пересчета суммы счета в доллары США по курсу НБРБ на день подписания  настоящего договора и последующего пересчета в белорусские рубли по курсу НБРБ на день выставления счета. Кроме того, в случае нарушения срока оплаты согласно настоящего договора, Исполнитель вправе пересчитать сумму выставленного, но неоплаченного счета и перевыставить счет с учетом корректировки.')
+	else:
+		replace_string(new_file_is, 'CurrencyText_', '')
+			
+	# Check param "CostNum" and replace in doc file "CostNum_".
+	document_Summa = string_to_writenumber(int(CostNum))
+	replace_string(new_file_is, 'CostNum_', document_Summa)
+	NDSNum = int(CostNum) * int(rate)
+	NDSNum_write = string_to_writenumber(int(NDSNum))
+	replace_string(new_file_is, 'NDSNum_', NDSNum_write)
+	
+	# Check param "AgrLaw" and replace in doc file "AgrLaw_".
+	if int(AgrLaw) == 1: 
+		replace_string(new_file_is, 'AgrLaw_', 'Арбитражном суде г. Москвы')
+	else:
+		replace_string(new_file_is, 'AgrLaw_', 'Хозяйственном суде по месту нахождения Истца')
+
+	# Check param "ProductName" and replace in doc file "ProductName_".	
+	if int(ProductName) == 1: 
+		replace_string(new_file_is, 'ProductName_', 'разработку научно технической продукции')
+	elif int(ProductName) == 2:
+		replace_string(new_file_is, 'ProductName_', 'проведение опытно конструкторских работ')
+	elif int(ProductName) == 3:
+		replace_string(new_file_is, 'ProductName_', 'разработку программного обеспечения')
+	else:
+		replace_string(new_file_is, 'ProductName_', ProductName_type)
+	
+	# Check param "ProductName" and replace in doc file "ProductName_".	
+	if int(CostPrePayment) == 1: 
+		replace_string(new_file_is, 'CostPrePayment_', '70 (семидесяти)')
+	elif int(CostPrePayment) == 2:
+		replace_string(new_file_is, 'CostPrePayment_', '50 (пятидесяти)')
+	else:
+		replace_string(new_file_is, 'CostPrePayment_', CostPrePayment_type)
+		
+	replace_string(new_file_is, 'ProductNameDetail_', ProductNameDetail)
+			
+	return
+
+
 
